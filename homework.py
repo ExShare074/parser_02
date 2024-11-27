@@ -3,7 +3,7 @@ import scrapy
 import csv
 
 class DivannewparsSpider(scrapy.Spider):
-    name = "divannewpars"
+    name = "divanparscraper"
     allowed_domains = ["divan.ru"]
     start_urls = ["https://www.divan.ru/krasnodar/category/divany-i-kresla"]
 
@@ -20,7 +20,7 @@ class DivannewparsSpider(scrapy.Spider):
             }
 
     def close(self, reason):
-        with open("divan2.csv", "w", newline='', encoding="utf-8") as file:
+        with open("divanscraper.csv", "w", newline='', encoding="utf-8") as file:
             writer = csv.writer(file)
             writer.writerow(["Название дивана", "Цена", "Ссылка на диван"])
             for item in self.crawled_data:
