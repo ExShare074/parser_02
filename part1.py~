@@ -1,0 +1,46 @@
+import time
+import csv
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+driver = webdriver.Chrome()
+url = "https://tomsk.hh.ru/vacancies/programmist"
+
+driver.get(url)
+
+try:
+    # Увеличьте время ожидания
+    WebDriverWait(driver, 20).until(
+        EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.vacancy-serp-item'))
+    )
+
+    vacancies = driver.find_elements(By.CSS_SELECTOR, 'div.vacancy-serp-item')
+    parsed_data = []
+
+    for vacancy in vacancies:
+        try:
+            title_element = vacancy.find_element(By.CSS_SELECTOR, 'a[data-qa="serp-item__title"]')
+            title = title_element.text
+            link = title_element.get_attribute('href')
+            company = vacancy.find_element(By.CSS_SELECTOR, 'a[data-qa="serp-item__meta-info"]').text
+
+            try:
+                salary = vacancy.find_element(By.CSS_SELECTOR, 'span[data-qa="serp-item__compensation"]').text
+            except:
+                salary = "Не указана"
+
+            parsed_data.append([title, company, salary, link])
+
+        except Exception as e:
+            print(f"Произошла ошибка при парсинге: {e}")
+            continue
+
+finally:
+    driver.quit()
+
+with open("hh.csv", "w", newline='', encoding="utf-8") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Название вакансии", "название компании", "Зарплата", "Ссылка на вакансию"])
+    writer.writerows(parsed_data)
