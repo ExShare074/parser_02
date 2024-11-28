@@ -25,7 +25,6 @@ class DivannewparsSpider(scrapy.Spider):
                 'url': url
             })
 
-            # Передача данных для pipeline или других обработчиков
             yield {
                 'name': name,
                 'price': price,
