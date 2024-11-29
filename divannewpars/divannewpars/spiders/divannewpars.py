@@ -29,7 +29,7 @@ for divan in divans:
         print(f"Произошла ошибка при парсинге: {e}")
 driver.quit()
 
-with open("../../../divan.csv", "w", newline='', encoding="utf-8") as file:
+with open("divan.csv", "w", newline='', encoding="utf-8") as file:
     writer = csv.writer(file)
     writer.writerow(["Название дивана", "Цена", "Ссылка на диван"])
     writer.writerows(parsed_data)
